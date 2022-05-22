@@ -1,26 +1,18 @@
 import { useState } from "react";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import Navigator from "./components/layout/Navigator";
-import Header from "./components/layout/Header";
-import Content from "./Content";
-import { Routes, Route } from "react-router-dom";
 
-const Copyright = () => {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://ffxi-tools.com/">
-        FFXI-Tools
-      </Link>{" "}
-      {new Date().getFullYear()}.
-    </Typography>
-  );
-};
+import Navigator from "./components/Layout/Navigator";
+import Header from "./components/Layout/Header";
+import Copyright from "./components/Layout/Copyright";
+import PeopleIcon from "@mui/icons-material/People";
+import DnsRoundedIcon from "@mui/icons-material/DnsRounded";
+import SettingsIcon from "@mui/icons-material/Settings";
+import PhonelinkSetupIcon from "@mui/icons-material/PhonelinkSetup";
+import AppRoutes from "./routes/AppRoutes";
 
 let theme = createTheme();
 
@@ -73,6 +65,49 @@ theme = {
   },
 };
 
+const categories = [
+  {
+    id: "Build",
+    children: [
+      {
+        id: "My Sets",
+        icon: <PeopleIcon />,
+        link: "/admin/item",
+        active: false,
+      },
+      {
+        id: "My Items",
+        icon: <DnsRoundedIcon />,
+        link: "/login",
+        active: false,
+      },
+    ],
+  },
+  {
+    id: "Admin",
+    children: [
+      {
+        id: "Edit Items",
+        icon: <SettingsIcon />,
+        link: "/admin/item",
+        active: false,
+      },
+      {
+        id: "Edit Users",
+        icon: <PeopleIcon />,
+        link: "/admin/item",
+        active: false,
+      },
+      {
+        id: "Edit Sets",
+        icon: <PhonelinkSetupIcon />,
+        link: "/admin/item",
+        active: false,
+      },
+    ],
+  },
+];
+
 const drawerWidth = 256;
 
 const App = () => {
@@ -110,15 +145,9 @@ const App = () => {
             component="main"
             sx={{ flex: 1, py: 3, px: 3, bgcolor: "#eaeff1" }}
           >
-            <Routes>
-              <Route path="/" element={<Content />} />
-              <Route path="login" element={<Content />} />
-              <Route path="register" element={<Content />} />
-            </Routes>
+            <AppRoutes />
           </Box>
-          <Box component="footer" sx={{ p: 2, bgcolor: "#eaeff1" }}>
-            <Copyright />
-          </Box>
+          <Copyright />
         </Box>
       </Box>
     </ThemeProvider>

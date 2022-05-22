@@ -1,4 +1,4 @@
-import * as React from "react";
+import { Link, useLocation } from "react-router-dom";
 import Divider from "@mui/material/Divider";
 import Drawer, { DrawerProps } from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -9,42 +9,11 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import PeopleIcon from "@mui/icons-material/People";
 import DnsRoundedIcon from "@mui/icons-material/DnsRounded";
-import PermMediaOutlinedIcon from "@mui/icons-material/PhotoSizeSelectActual";
-import PublicIcon from "@mui/icons-material/Public";
-import SettingsEthernetIcon from "@mui/icons-material/SettingsEthernet";
-import SettingsInputComponentIcon from "@mui/icons-material/SettingsInputComponent";
-import TimerIcon from "@mui/icons-material/Timer";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PhonelinkSetupIcon from "@mui/icons-material/PhonelinkSetup";
-
-const categories = [
-  {
-    id: "Build",
-    children: [
-      {
-        id: "Authentication",
-        icon: <PeopleIcon />,
-        active: true,
-      },
-      { id: "Database", icon: <DnsRoundedIcon /> },
-      { id: "Storage", icon: <PermMediaOutlinedIcon /> },
-      { id: "Hosting", icon: <PublicIcon /> },
-      { id: "Functions", icon: <SettingsEthernetIcon /> },
-      {
-        id: "Machine learning",
-        icon: <SettingsInputComponentIcon />,
-      },
-    ],
-  },
-  {
-    id: "Admin",
-    children: [
-      { id: "Items", icon: <SettingsIcon /> },
-      { id: "Users", icon: <TimerIcon /> },
-      { id: "GearSets", icon: <PhonelinkSetupIcon /> },
-    ],
-  },
-];
+import { ReactComponentElement, useEffect, useState } from "react";
+import { OverridableComponent } from "@mui/material/OverridableComponent";
+import { SvgIconTypeMap } from "@mui/material";
 
 const item = {
   py: "2px",
@@ -61,8 +30,87 @@ const itemCategory = {
   px: 3,
 };
 
+const Categories = [
+  {
+    id: "Build",
+    children: [
+      {
+        id: "My Sets",
+        icon: <PeopleIcon />,
+        link: "/admin/item",
+        active: false,
+      },
+      {
+        id: "My Items",
+        icon: <DnsRoundedIcon />,
+        link: "/login",
+        active: false,
+      },
+    ],
+  },
+  {
+    id: "Admin",
+    children: [
+      {
+        id: "Edit Items",
+        icon: <SettingsIcon />,
+        link: "/admin/item",
+        active: false,
+      },
+      {
+        id: "Edit Users",
+        icon: <PeopleIcon />,
+        link: "/admin/item",
+        active: false,
+      },
+      {
+        id: "Edit Sets",
+        icon: <PhonelinkSetupIcon />,
+        link: "/admin/item",
+        active: false,
+      },
+    ],
+  },
+];
+interface NavigatorProps {
+  PaperProps?: object;
+  variant?: string;
+  sx?: object;
+  open?: boolean;
+  onClose?: object;
+  DrawerProps?: DrawerProps;
+}
+
+interface NavigationItems {
+  id: string;
+  children: [
+    {
+      id: string;
+      icon: JSX.Element;
+      link: string;
+      active: boolean;
+    }
+  ];
+}
+
 export default function Navigator(props: DrawerProps) {
   const { ...other } = props;
+  const [links, setLinks] = useState([...Categories]);
+  const location = useLocation().pathname;
+
+  useEffect(() => {
+    const newPath = location;
+    links.forEach((main) => {
+      main.children.forEach((item) => {
+        if (newPath === item.link) {
+          item.active = true;
+        } else {
+          item.active = false;
+        }
+      });
+    });
+    setLinks([...links]);
+  }, [location]);
 
   return (
     <Drawer variant="permanent" {...other}>
@@ -73,14 +121,19 @@ export default function Navigator(props: DrawerProps) {
           FFXI-Tools
         </ListItem>
 
-        {categories.map(({ id, children }) => (
+        {links.map(({ id, children }) => (
           <Box key={id} sx={{ bgcolor: "#101F33" }}>
             <ListItem sx={{ py: 1, px: 2 }}>
               <ListItemText sx={{ color: "#fff" }}>{id}</ListItemText>
             </ListItem>
-            {children.map(({ id: childId, icon, active }) => (
+            {children.map(({ id: childId, icon, active, link }) => (
               <ListItem disablePadding key={childId}>
-                <ListItemButton selected={active} sx={item}>
+                <ListItemButton
+                  selected={active}
+                  sx={item}
+                  to={link}
+                  component={Link}
+                >
                   <ListItemIcon>{icon}</ListItemIcon>
                   <ListItemText>{childId}</ListItemText>
                 </ListItemButton>
