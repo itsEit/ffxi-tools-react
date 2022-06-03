@@ -8,10 +8,6 @@ import Box from "@mui/material/Box";
 import Navigator from "./components/Layout/Navigator";
 import Header from "./components/Layout/Header";
 import Copyright from "./components/Layout/Copyright";
-import PeopleIcon from "@mui/icons-material/People";
-import DnsRoundedIcon from "@mui/icons-material/DnsRounded";
-import SettingsIcon from "@mui/icons-material/Settings";
-import PhonelinkSetupIcon from "@mui/icons-material/PhonelinkSetup";
 import AppRoutes from "./routes/AppRoutes";
 
 let theme = createTheme();
@@ -65,49 +61,6 @@ theme = {
   },
 };
 
-const categories = [
-  {
-    id: "Build",
-    children: [
-      {
-        id: "My Sets",
-        icon: <PeopleIcon />,
-        link: "/admin/item",
-        active: false,
-      },
-      {
-        id: "My Items",
-        icon: <DnsRoundedIcon />,
-        link: "/login",
-        active: false,
-      },
-    ],
-  },
-  {
-    id: "Admin",
-    children: [
-      {
-        id: "Edit Items",
-        icon: <SettingsIcon />,
-        link: "/admin/item",
-        active: false,
-      },
-      {
-        id: "Edit Users",
-        icon: <PeopleIcon />,
-        link: "/admin/item",
-        active: false,
-      },
-      {
-        id: "Edit Sets",
-        icon: <PhonelinkSetupIcon />,
-        link: "/admin/item",
-        active: false,
-      },
-    ],
-  },
-];
-
 const drawerWidth = 256;
 
 const App = () => {
@@ -141,12 +94,7 @@ const App = () => {
         </Box>
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
           <Header onDrawerToggle={handleDrawerToggle} />
-          <Box
-            component="main"
-            sx={{ flex: 1, py: 3, px: 3, bgcolor: "#eaeff1" }}
-          >
-            <AppRoutes />
-          </Box>
+          <AppRoutes />
           <Copyright />
         </Box>
       </Box>
